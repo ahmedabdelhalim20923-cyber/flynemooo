@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fly Nemooo - عروض الرحلات</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+
+        body {
+            background-color: #f4f6f8;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        header {
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            color: #fff;
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        header h1 {
+            font-size: 1.8rem;
+        }
+
+        .admin-btn {
+            background-color: #ff6b6b;
+            color: #fff;
+            text-decoration: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 6px;
+            font-weight: bold;
+            transition: background 0.3s ease;
+        }
+
+        .admin-btn:hover {
+            background-color: #ee5253;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 4rem 1rem 2rem;
+        }
+
+        .hero h2 {
+            font-size: 2.2rem;
+            color: #1e3c72;
+            margin-bottom: 0.5rem;
+        }
+
+        .hero p {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .offers-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .offer-card {
+            background: #fff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease;
+        }
+
+        .offer-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .offer-card img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            background-color: #eee;
+        }
+
+        .offer-details {
+            padding: 1.2rem;
+        }
+
+        .offer-title {
+            font-size: 1.3rem;
+            color: #1e3c72;
+            margin-bottom: 0.5rem;
+        }
+
+        .offer-price {
+            font-size: 1.2rem;
+            color: #27ae60;
+            font-weight: bold;
+            margin-bottom: 0.8rem;
+        }
+
+        .offer-desc {
+            color: #555;
+            font-size: 0.95rem;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: #888;
+            font-size: 0.9rem;
+            margin-top: 3rem;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Fly Nemooo ✈️</h1>
+        <a href="./admin/" class="admin-btn">لوحة التحكم</a>
+    </header>
+
+    <section class="hero">
+        <h2>أفضل عروض الرحلات</h2>
+        <p>استكشف أحدث الوجهات بأفضل الأسعار</p>
+    </section>
+
+    <div class="container">
+        <div id="offers-container" class="offers-grid">
+            <!-- سيتم تحميل العروض تلقائياً من ملف offers.json -->
+        </div>
+    </div>
+
+    <footer>
+        &copy; جميع الحقوق محفوظة - Fly Nemooo
+    </footer>
+
+    <script>
+        fetch('./content/offers.json')
+            .then(response => response.json())
+            .then(data => {
+                const container = document.getElementById('offers-container');
+                const offers = Array.isArray(data) ? data : [data];
+                
+                container.innerHTML = offers.map(offer => `
+                    <div class="offer-card">
+                        ${offer.image ? `<img src="${offer.image}" alt="${offer.title}">` : ''}
+                        <div class="offer-details">
+                            <h3 class="offer-title">${offer.title || 'عرض رحلة'}</h3>
+                            <div class="offer-price">${offer.price || ''}</div>
+                            <p class="offer-desc">${offer.desc || ''}</p>
+                        </div>
+                    </div>
+                `).join('');
+            })
+            .catch(() => {
+                document.getElementById('offers-container').innerHTML = `
+                    <div style="grid-column: 1/-1; text-align: center; color: #777; padding: 2rem;">
+                        لا يوجد عروض مضافة حالياً. يمكنك إضافة عروض جديدة من <a href="./admin/">لوحة التحكم</a>.
+                    </div>
+                `;
+            });
+    </script>
+
+</body>
+</html>
